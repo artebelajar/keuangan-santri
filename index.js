@@ -160,6 +160,13 @@ app.get("/api/transactions", authMiddleware, async (c) => {
 
 app.use("/*", serveStatic({ root: "./public" }));
 
-const port = 8000;
-console.log(`server is running on http://localhost:${port}`);
-serve({ fetch: app.fetch, port });
+if (process.env.VERCEL) {
+    globalThis.app = app;
+} else {
+    const port = 8000;
+    console.log(`🚀 Server is running on http://localhost:${port}`);
+    serve({ fetch: app.fetch, port });
+}
+// const port = 8000;
+// console.log(`server is running on http://localhost:${port}`);
+// serve({ fetch: app.fetch, port });
