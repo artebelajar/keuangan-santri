@@ -1,213 +1,208 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
+<html lang="id">
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Logging Out...</title>
+    <title>Logging Out... - CuanKu</title>
 
-    <!-- FONT INTER -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
-      :root {
-        --bg: #020617;
-        --card: rgba(255, 255, 255, 0.08);
-        --border: rgba(255, 255, 255, 0.15);
-        --text: #e5e7eb;
-        --muted: #9ca3af;
-        --primary: #38bdf8;
-        --radius: 18px;
-      }
-
-      * {
-        box-sizing: border-box;
-        font-family: "Inter", system-ui, sans-serif;
-      }
-
-      body {
-        margin: 0;
-        min-height: 100vh;
-        background: linear-gradient(135deg, #020617, #0f172a);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--text);
-        overflow: hidden;
-      }
-
-      .logout-card {
-        width: 100%;
-        max-width: 420px;
-        padding: 36px 30px;
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        backdrop-filter: blur(16px);
-        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45);
-        text-align: center;
-        animation: fadeScale 0.6s ease;
-        position: relative;
-      }
-
-      h1 {
-        font-size: 1.4rem;
-        margin-bottom: 8px;
-      }
-
-      p {
-        font-size: 0.95rem;
-        color: var(--muted);
-        margin-bottom: 28px;
-      }
-
-      /* ===== ADVANCED LOADER ===== */
-      .loader {
-        width: 80px;
-        height: 80px;
-        margin: 0 auto;
-        position: relative;
-      }
-
-      .loader span {
-        position: absolute;
-        inset: 0;
-        border-radius: 50%;
-        border: 3px solid transparent;
-        border-top-color: var(--primary);
-        animation: spin 1.4s linear infinite;
-      }
-
-      .loader span:nth-child(2) {
-        inset: 8px;
-        border-top-color: #22c55e;
-        animation-duration: 1.8s;
-      }
-
-      .loader span:nth-child(3) {
-        inset: 16px;
-        border-top-color: #a855f7;
-        animation-duration: 2.2s;
-      }
-
-      /* Floating dots */
-      .dots {
-        margin-top: 22px;
-        font-size: 1.1rem;
-        letter-spacing: 3px;
-      }
-
-      .dots span {
-        animation: blink 1.4s infinite both;
-      }
-
-      .dots span:nth-child(2) {
-        animation-delay: 0.2s;
-      }
-
-      .dots span:nth-child(3) {
-        animation-delay: 0.4s;
-      }
-
-      /* BACKGROUND GLOW */
-      .glow {
-        position: absolute;
-        width: 280px;
-        height: 280px;
-        background: radial-gradient(
-          circle,
-          rgba(56, 189, 248, 0.25),
-          transparent 70%
-        );
-        top: -80px;
-        right: -80px;
-        filter: blur(40px);
-        animation: float 6s ease-in-out infinite;
-        z-index: -1;
-      }
-
-      /* ANIMATIONS */
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
+        :root {
+            --bg: #020617;
+            --primary: #38bdf8;
+            --accent: #818cf8;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --surface: rgba(30, 41, 59, 0.7);
         }
-      }
 
-      @keyframes blink {
-        0%,
-        80%,
-        100% {
-          opacity: 0;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Plus Jakarta Sans", sans-serif;
         }
-        40% {
-          opacity: 1;
-        }
-      }
 
-      @keyframes fadeScale {
-        from {
-          opacity: 0;
-          transform: scale(0.95);
+        body {
+            min-height: 100vh;
+            background-color: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            color: var(--text-main);
         }
-        to {
-          opacity: 1;
-          transform: scale(1);
-        }
-      }
 
-      @keyframes float {
-        0% {
-          transform: translateY(0);
+        /* Efek Cahaya Latar Belakang */
+        .ambient-light {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(60px);
+            animation: moveLight 10s ease-in-out infinite alternate;
+            z-index: 0;
         }
-        50% {
-          transform: translateY(18px);
-        }
-        100% {
-          transform: translateY(0);
-        }
-      }
 
-      @media (max-width: 480px) {
-        .logout-card {
-          margin: 0 16px;
-          padding: 30px 24px;
+        .logout-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 400px;
+            padding: 3rem 2rem;
+            background: var(--surface);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 32px;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: cardEnter 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
-      }
+
+        .brand-name {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            opacity: 0.8;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 2.5rem;
+        }
+
+        /* ===== MODERN ORBITAL LOADER ===== */
+        .loader-wrapper {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 2.5rem;
+        }
+
+        .orbital-ring {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            padding: 3px;
+            background: conic-gradient(from 0deg, transparent, var(--primary));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: destination-out;
+            mask-composite: exclude;
+            animation: spin 1s linear infinite;
+        }
+
+        .icon-center {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            animation: pulseIcon 2s ease-in-out infinite;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes moveLight {
+            from { transform: translate(-20%, -20%); }
+            to { transform: translate(20%, 20%); }
+        }
+
+        @keyframes cardEnter {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes pulseIcon {
+            0%, 100% { transform: scale(1); opacity: 1; filter: drop-shadow(0 0 0px var(--primary)); }
+            50% { transform: scale(1.1); opacity: 0.7; filter: drop-shadow(0 0 10px var(--primary)); }
+        }
+
+        /* Status Text Dots Animation */
+        .status-text::after {
+            content: '';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: ''; }
+            40% { content: '.'; }
+            60% { content: '..'; }
+            80% { content: '...'; }
+        }
     </style>
-  </head>
+</head>
 
-  <body>
-    <div class="logout-card">
-      <div class="glow"></div>
+<body>
+    <div class="ambient-light"></div>
 
-      <h1>🚪 Logging Out</h1>
-      <p>Anda sedang keluar dari aplikasi, mohon tunggu</p>
+    <div class="logout-container">
+        <div class="brand-name">CuanKu.</div>
+        
+        <div class="loader-wrapper">
+            <div class="orbital-ring"></div>
+            <div class="icon-center">
+                <i data-lucide="log-out" size="40"></i>
+            </div>
+        </div>
 
-      <div class="loader">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-
-      <div class="dots">
-        <span>.</span><span>.</span><span>.</span>
-      </div>
+        <h1>Keamanan Terjamin</h1>
+        <p>Sesi Anda sedang ditutup secara aman</p>
+        
+        <div style="font-size: 0.85rem; color: var(--primary); font-weight: 600;" class="status-text">
+            Menghapus sesi aktif
+        </div>
     </div>
 
     <script>
-      (async () => {
-        try {
-          await fetch("/api/logout", { method: "POST" });
-        } catch (error) {
-          console.error("logout failed", error);
-        } finally {
-          // Delay kecil biar animasi terasa smooth
-          setTimeout(() => {
-            window.location.href = "/login/";
-          }, 2000);
-        }
-      })();
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Logout Logic
+        (async () => {
+            const startTime = Date.now();
+            
+            try {
+                // Menjalankan API Logout
+                await fetch("/api/logout", { method: "POST" });
+            } catch (error) {
+                console.error("Logout API failed", error);
+            } finally {
+                // Pastikan user melihat animasi minimal selama 2 detik
+                const elapsedTime = Date.now() - startTime;
+                const remainingTime = Math.max(2000 - elapsedTime, 0);
+
+                setTimeout(() => {
+                    // Beri efek transisi akhir sebelum pindah
+                    document.querySelector('.logout-container').style.opacity = '0';
+                    document.querySelector('.logout-container').style.transform = 'scale(0.9)';
+                    document.querySelector('.logout-container').style.transition = 'all 0.5s ease';
+                    
+                    setTimeout(() => {
+                        window.location.href = "/login/";
+                    }, 400);
+                }, remainingTime);
+            }
+        })();
     </script>
-  </body>
+</body>
 </html>

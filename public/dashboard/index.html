@@ -1,751 +1,409 @@
-<!doctype html>
-<html lang="en">
-  <head>
+<!DOCTYPE html>
+<html lang="id">
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard Keuangan</title>
+    <title>CuanKu - Dashboard Keuangan Profesional</title>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
-      :root {
-        --bg: #0f172a;
-        --card: rgba(255, 255, 255, 0.08);
-        --border: rgba(255, 255, 255, 0.15);
-        --text: #e5e7eb;
-        --muted: #9ca3af;
-        --primary: #38bdf8;
-        --income: #22c55e;
-        --outcome: #ef4444;
-        --radius: 14px;
-        --blur: blur(12px);
-      }
+        :root {
+            --bg-body: #020617;
+            --bg-card: rgba(30, 41, 59, 0.5);
+            --border: rgba(255, 255, 255, 0.1);
+            --primary: #38bdf8;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --glass: blur(12px);
+        }
 
-      * {
-        box-sizing: border-box;
-        font-family:
-          "Inter",
-          system-ui,
-          -apple-system,
-          sans-serif;
-      }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
 
-      body {
-        margin: 0;
-        background: linear-gradient(135deg, #020617, #0f172a);
-        color: var(--text);
-        min-height: 100vh;
-      }
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            background-image: radial-gradient(circle at top right, rgba(56, 189, 248, 0.1), transparent),
+                              radial-gradient(circle at bottom left, rgba(34, 197, 94, 0.05), transparent);
+        }
 
-      header {
-        padding: 24px 32px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 1px solid var(--border);
-        background: rgba(15, 23, 42, 0.7);
-        backdrop-filter: var(--blur);
-        position: sticky;
-        top: 0;
-        z-index: 10;
-      }
+        /* --- LAYOUT COMPONENTS --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
 
-      header h1 {
-        margin: 0;
-        font-size: 1.4rem;
-      }
-
-      header a {
-        color: #f87171;
-        text-decoration: none;
-        font-weight: 600;
-      }
-
-      main {
-        max-width: 900px;
-        margin: 32px auto;
-        padding: 0 20px;
-        display: grid;
-        gap: 32px;
-      }
-
-      h2 {
-        margin-bottom: 12px;
-        font-size: 1.2rem;
-      }
-
-      hr {
-        border: none;
-        border-top: 1px solid var(--border);
-        margin: 24px 0;
-      }
-
-      /* CARD */
-      #summary,
-      form,
-      #transactionList {
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        padding: 20px;
-        backdrop-filter: var(--blur);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-      }
-
-      #summary p,
-      #summary h3 {
-        margin: 8px 0;
-      }
-
-      #income {
-        color: var(--income);
-      }
-
-      #outcome {
-        color: var(--outcome);
-      }
-
-      #balance {
-        color: var(--primary);
-      }
-
-      /* FORM */
-      form label {
-        display: block;
-        margin-top: 14px;
-        font-size: 0.9rem;
-        color: var(--muted);
-      }
-
-      form input,
-      form select {
-        width: 100%;
-        margin-top: 6px;
-        padding: 12px 14px;
-        border-radius: 10px;
-        border: 1px solid var(--border);
-        background: rgba(15, 23, 42, 0.8);
-        color: var(--text);
-        outline: none;
-      }
-
-      form input:focus,
-      form select:focus {
-        border-color: var(--primary);
-      }
-
-      button {
-        margin-top: 20px;
-        width: 100%;
-        padding: 14px;
-        border-radius: 12px;
-        border: none;
-        background: linear-gradient(135deg, #38bdf8, #2563eb);
-        color: white;
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition:
-          transform 0.15s ease,
-          box-shadow 0.15s ease;
-      }
-
-      button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(56, 189, 248, 0.4);
-      }
-
-      /* MESSAGE */
-      #addMessage {
-        margin-bottom: 12px;
-        font-weight: 600;
-      }
-
-      /* TRANSACTION LIST */
-      #transactionList {
-        list-style: none;
-        padding: 0;
-      }
-
-      #transactionList li {
-        padding: 12px 10px;
-        border-bottom: 1px solid var(--border);
-        font-size: 0.95rem;
-      }
-
-      #transactionList li:last-child {
-        border-bottom: none;
-      }
-
-      /* SELECT RIWAYAT */
-      #riwayatForm {
-        margin-bottom: 12px;
-      }
-
-      /* RESPONSIVE */
-      @media (max-width: 600px) {
         header {
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 10px;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: var(--glass);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        main {
-          margin: 20px auto;
-        }
-      }
-
-      /* SUMMARY FLEX */
-      .summary-flex {
-        display: flex;
-        gap: 20px;
-        justify-content: space-between;
-      }
-
-      .summary-card {
-        flex: 1;
-        padding: 20px;
-        border-radius: 16px;
-        background: linear-gradient(
-          135deg,
-          rgba(255, 255, 255, 0.12),
-          rgba(255, 255, 255, 0.03)
-        );
-        border: 1px solid var(--border);
-        backdrop-filter: blur(12px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
-        transition: transform 0.2s ease;
-      }
-
-      .summary-card:hover {
-        transform: translateY(-4px);
-      }
-
-      .summary-card .label {
-        font-size: 0.85rem;
-        color: var(--muted);
-        letter-spacing: 0.5px;
-      }
-
-      .summary-card strong {
-        display: block;
-        margin-top: 8px;
-        font-size: 1.5rem;
-      }
-
-      /* COLOR ACCENT */
-      .summary-card.income {
-        border-left: 4px solid var(--income);
-      }
-
-      .summary-card.outcome {
-        border-left: 4px solid var(--outcome);
-      }
-
-      .summary-card.balance {
-        border-left: 4px solid var(--primary);
-      }
-
-      /* RESPONSIVE */
-      @media (max-width: 700px) {
-        .summary-flex {
-          flex-direction: column;
-        }
-      }
-
-      /* TABLE WRAPPER */
-      .table-wrapper {
-        overflow-x: auto;
-        border-radius: 16px;
-        border: 1px solid var(--border);
-        background: var(--card);
-        backdrop-filter: blur(12px);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-      }
-
-      /* TABLE */
-      table {
-        width: 100%;
-        border-collapse: collapse;
-      }
-
-      thead {
-        background: rgba(255, 255, 255, 0.05);
-      }
-
-      th,
-      td {
-        padding: 14px 16px;
-        text-align: left;
-      }
-
-      th {
-        font-size: 0.85rem;
-        color: var(--muted);
-        letter-spacing: 0.4px;
-      }
-
-      tbody tr {
-        border-top: 1px solid var(--border);
-        animation: fadeSlide 0.4s ease forwards;
-      }
-
-      tbody tr:hover {
-        background: rgba(255, 255, 255, 0.05);
-      }
-
-      /* STATUS BADGE */
-      .status {
-        padding: 6px 10px;
-        border-radius: 999px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        width: fit-content;
-      }
-
-      .status.income {
-        background: rgba(34, 197, 94, 0.15);
-        color: var(--income);
-      }
-
-      .status.outcome {
-        background: rgba(239, 68, 68, 0.15);
-        color: var(--outcome);
-      }
-
-      /* NOMINAL */
-      .nominal.income {
-        color: var(--income);
-        font-weight: 600;
-      }
-
-      .nominal.outcome {
-        color: var(--outcome);
-        font-weight: 600;
-      }
-
-      /* LOADING */
-      .loading {
-        text-align: center;
-        padding: 24px;
-        color: var(--muted);
-      }
-
-      /* ANIMATION */
-      @keyframes fadeSlide {
-        from {
-          opacity: 0;
-          transform: translateY(6px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      /* MOBILE MODE */
-      @media (max-width: 700px) {
-        table,
-        thead {
-          display: none;
+        .nav-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        tbody tr {
-          display: block;
-          margin-bottom: 14px;
-          border-radius: 14px;
-          padding: 14px;
-          background: rgba(255, 255, 255, 0.05);
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: var(--primary);
         }
 
-        tbody td {
-          display: flex;
-          justify-content: space-between;
-          padding: 6px 0;
-          border: none;
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
-        tbody td::before {
-          content: attr(data-label);
-          color: var(--muted);
-          font-size: 0.8rem;
-        }
-      }
-      /* NAVBAR */
-      .navbar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 18px 28px;
-        background: rgba(15, 23, 42, 0.75);
-        backdrop-filter: blur(14px);
-        border-bottom: 1px solid var(--border);
-        position: sticky;
-        top: 0;
-        z-index: 100;
-      }
-
-      .nav-left h1 {
-        margin: 0;
-        font-size: 1.2rem;
-        font-weight: 700;
-        letter-spacing: 0.4px;
-      }
-
-      .nav-right {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-      }
-
-      .welcome {
-        font-size: 0.9rem;
-        color: var(--muted);
-      }
-
-      .logout {
-        padding: 8px 14px;
-        border-radius: 999px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        color: #fff;
-        text-decoration: none;
-        background: linear-gradient(135deg, #ef4444, #dc2626);
-        transition:
-          transform 0.15s ease,
-          box-shadow 0.15s ease;
-      }
-
-      .logout:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
-      }
-
-      /* MOBILE NAVBAR */
-      @media (max-width: 600px) {
-        .navbar {
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 10px;
-          padding: 16px 20px;
+        .btn-logout {
+            padding: 0.5rem 1rem;
+            border-radius: 99px;
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            transition: 0.3s;
         }
 
-        .nav-right {
-          width: 100%;
-          justify-content: space-between;
+        .btn-logout:hover { background: var(--danger); color: white; }
+
+        /* --- DASHBOARD GRID --- */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            padding: 2rem 0;
         }
 
-        .welcome {
-          font-size: 0.85rem;
+        @media (min-width: 1024px) {
+            .main-grid { grid-template-columns: 380px 1fr; }
         }
-      }
+
+        /* --- CARDS --- */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            backdrop-filter: var(--glass);
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-item {
+            padding: 1.5rem;
+            border-radius: 16px;
+            border-left: 4px solid var(--primary);
+            background: rgba(255,255,255,0.02);
+        }
+
+        .summary-item.income { border-color: var(--success); }
+        .summary-item.outcome { border-color: var(--danger); }
+
+        .summary-label { color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 600; }
+        .summary-value { display: block; font-size: 1.4rem; font-weight: 700; margin-top: 0.5rem; }
+
+        /* --- FORM UPGRADE --- */
+        .form-title { font-size: 1.1rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px; }
+        
+        .type-pill {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: rgba(0,0,0,0.2);
+            padding: 4px;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .pill-btn {
+            padding: 10px;
+            text-align: center;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            transition: 0.3s;
+        }
+
+        .pill-btn.active.income { background: var(--success); color: white; }
+        .pill-btn.active.outcome { background: var(--danger); color: white; }
+
+        .input-group { margin-bottom: 1.2rem; }
+        .input-group label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; }
+        
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: white;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.1); }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            border: none;
+            border-radius: 12px;
+            color: #020617;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: 0.3s;
+        }
+
+        .btn-submit:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        /* --- TABLE STYLE --- */
+        .table-wrapper { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 12px; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; border-bottom: 1px solid var(--border); }
+        td { padding: 16px 12px; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+        
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+        .status-badge.income { background: rgba(34, 197, 94, 0.1); color: var(--success); }
+        .status-badge.outcome { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+
     </style>
-  </head>
-  <body>
-    <header class="navbar">
-      <div class="nav-left">
-        <h1></h1>
-      </div>
+</head>
+<body>
 
-      <div class="nav-right">
-        <span class="welcome"
-          >Halo, <strong id="username">Pengguna</strong></span
-        >
-        <a href="/logout/" class="logout">Logout</a>
-      </div>
+    <header>
+        <div class="container nav-wrapper">
+            <div class="logo">CUANKU.</div>
+            <div class="user-menu">
+                <span class="text-muted">Halo, <strong id="username" style="color: white;">...</strong></span>
+                <a href="/logout/" class="btn-logout">Logout</a>
+            </div>
+        </div>
     </header>
 
-    <main>
-      <h2>Ringkasan Bulan ini (<span id="currentMonthYear"></span>)</h2>
-      <div id="summary" class="summary-flex">
-        <div class="summary-card income">
-          <span class="label">Income</span>
-          <strong id="income">Rp 0</strong>
+    <main class="container">
+        <div style="margin-top: 2rem;">
+            <h2 style="margin-bottom: 1.5rem; font-size: 1.25rem;">Ikhtisar <span id="currentMonthYear" style="color: var(--primary);"></span></h2>
+            <div class="summary-grid">
+                <div class="summary-item income">
+                    <span class="summary-label">Pemasukan</span>
+                    <span class="summary-value" id="income">Rp 0</span>
+                </div>
+                <div class="summary-item outcome">
+                    <span class="summary-label">Pengeluaran</span>
+                    <span class="summary-value" id="outcome">Rp 0</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Saldo Saat Ini</span>
+                    <span class="summary-value" id="balance">Rp 0</span>
+                </div>
+            </div>
         </div>
 
-        <div class="summary-card outcome">
-          <span class="label">Outcome</span>
-          <strong id="outcome">Rp 0</strong>
+        <div class="main-grid">
+            <section>
+                <div class="card">
+                    <h3 class="form-title"><i data-lucide="plus-circle" size="18"></i> Transaksi Baru</h3>
+                    <div id="addMessage"></div>
+                    
+                    <form id="addTransactionForm">
+                        <div class="type-pill">
+                            <div class="pill-btn active income" id="pillIncome" onclick="setType('income')">Pemasukan</div>
+                            <div class="pill-btn outcome" id="pillOutcome" onclick="setType('outcome')">Pengeluaran</div>
+                        </div>
+                        <input type="hidden" id="status" value="income">
+
+                        <div class="input-group">
+                            <label>Nominal</label>
+                            <input type="number" id="nominal" placeholder="0" required />
+                        </div>
+                        <div class="input-group">
+                            <label>Tanggal</label>
+                            <input type="date" id="date" required />
+                        </div>
+                        <div class="input-group">
+                            <label>Keterangan</label>
+                            <input type="text" id="description" placeholder="Contoh: Gaji Pokok" />
+                        </div>
+                        
+                        <button type="submit" class="btn-submit">
+                            Simpan Transaksi <i data-lucide="send" size="16"></i>
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <section>
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <h3 class="form-title" style="margin:0;"><i data-lucide="list" size="18"></i> Riwayat</h3>
+                        <select id="riwayatSelect" onchange="loadData()" style="background:none; color:white; border:1px solid var(--border); padding: 5px; border-radius: 8px;">
+                            <option value="0">Bulan Ini</option>
+                            <option value="1">1 Bulan Lalu</option>
+                            <option value="3">3 Bulan Lalu</option>
+                        </select>
+                    </div>
+
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tanggal</th>
+                                    <th>Tipe</th>
+                                    <th>Nominal</th>
+                                    <th>Keterangan</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactionList">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
         </div>
-
-        <div class="summary-card balance">
-          <span class="label">Balance</span>
-          <strong id="balance">Rp 0</strong>
-        </div>
-      </div>
-
-      <hr />
-      <h2>Input Transaksi Baru</h2>
-      <div id="addMessage"></div>
-      <form action="" id="addTransactionForm">
-        <label for="nominal">Nominal</label>
-        <input
-          type="number"
-          id="nominal"
-          placeholder="Contoh: 500000"
-          required
-        />
-        <br />
-        <label for="date">Tanggal:</label>
-        <input type="date" id="date" required />
-        <br />
-        <label for="status">Status:</label>
-        <select name="status" id="status" required>
-          <option value="income">Income</option>
-          <option value="outcome">Outcome</option>
-        </select>
-        <br />
-        <label for="description">Keterangan (Opsional):</label>
-        <input
-          type="text"
-          id="description"
-          placeholder="Contoh: Gaji bulan lalu"
-        />
-        <br />
-        <button type="submit">Tambah Transaksi</button>
-      </form>
-
-      <h2>Riwayat Transaksi</h2>
-      <form action="" id="riwayatForm">
-        <label for="riwayatSelect">Tampilkan:</label>
-        <select
-          name="riwayatSelect"
-          id="riwayatSelect"
-          onchange="
-            riwayat = this.value;
-            fetchTransactions(CURRENT_YEAR, CURRENT_MONTH);
-          "
-        >
-          <option value="0">Bulan Ini</option>
-          <option value="1">1 Bulan Lalu</option>
-          <option value="3">3 Bulan Lalu</option>
-        </select>
-        <!-- <button type="submit">Tampilkan Riwayat</button> -->
-      </form>
-      <div class="table-wrapper">
-        <table id="transactionTable">
-          <thead>
-            <tr>
-              <th>Tanggal</th>
-              <th>Status</th>
-              <th>Nominal</th>
-              <th>Keterangan</th>
-            </tr>
-          </thead>
-          <tbody id="transactionList">
-            <tr>
-              <td colspan="4" class="loading">Memuat Data...</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </main>
 
     <script>
-      const usernameSpan = document.getElementById("username");
-      const incomeEl = document.getElementById("income");
-      const outcomeEl = document.getElementById("outcome");
-      const balanceEl = document.getElementById("balance");
-      const currentMonthYearEl = document.getElementById("currentMonthYear");
-      const addTransactionForm = document.getElementById("addTransactionForm");
-      const transactionList = document.getElementById("transactionList");
-      const addMessageDiv = document.getElementById("addMessage");
-      const riwayatForm = document.getElementById("riwayatForm");
-      let riwayat = document.getElementById("riwayatSelect").value; // 0: bulan ini, 1: semua riwayat
-      console.log("riwayat awal", riwayat);
+        // Init Icons
+        lucide.createIcons();
 
-      const TODAY = new Date();
-      const CURRENT_YEAR = TODAY.getFullYear();
-      const CURRENT_MONTH = (TODAY.getMonth() + 1).toString().padStart(2, "0");
-      let bulanRiwayat = [];
+        const state = {
+            today: new Date(),
+            year: new Date().getFullYear(),
+            month: (new Date().getMonth() + 1).toString().padStart(2, "0")
+        };
 
-      const formatRupiah = (number) => {
-        return new Intl.NumberFormat("id-ID", {
-          style: "currency",
-          currency: "IDR",
-          minimumFractionDigits: 2,
-        }).format(Number(number) || 0);
-      };
-
-      const checkAuth = async () => {
-        try {
-          const response = await fetch("/api/me", {
-            method: "GET",
-            credentials: "include",
-          });
-          if (!response.ok) {
-            window.location.href = "/login/";
-            return null;
-          }
-          const json = await response.json().catch(() => ({}));
-          const { success, data } = json;
-          console.log("checkAuth", json);
-          if (success && data) {
-            usernameSpan.textContent = data.username;
-            return data;
-          } else {
-            window.location.href = "/login/";
-            return null;
-          }
-        } catch (error) {
-          window.location.href = "/login/";
-          return null;
+        // --- UI Logic ---
+        function setType(type) {
+            document.getElementById('status').value = type;
+            document.getElementById('pillIncome').className = `pill-btn ${type === 'income' ? 'active income' : ''}`;
+            document.getElementById('pillOutcome').className = `pill-btn ${type === 'outcome' ? 'active outcome' : ''}`;
         }
-      };
 
-      // riwayatForm.addEventListener("submit", (e) => {
-      //   e.preventDefault();
-      //   riwayat = document.getElementById("riwayatSelect").value;
-      //   console.log("riwayat dipilih", riwayat);
-      //   // fetchTransactions(CURRENT_YEAR, CURRENT_MONTH);
-      // });
+        const formatIDR = (val) => new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 }).format(val);
 
-      const fetchTransactions = async (year, month) => {
-        currentMonthYearEl.textContent = `${month}-${year}`;
-        transactionList.innerHTML = "<li>Memuat Data...</li>";
+        // --- API Logic ---
+        async function checkAuth() {
+            try {
+                const res = await fetch("/api/me");
+                const json = await res.json();
+                if (json.success) {
+                    document.getElementById("username").textContent = json.data.username;
+                    return true;
+                }
+                window.location.href = "/login/";
+            } catch (e) { window.location.href = "/login/"; }
+            return false;
+        }
 
-        try {
-          // console.log("fetchTransactions dengan riwayat:", riwayat);
-          for (let i = 0; i < riwayat; i++) {
-            // bulanRiwayat.push({ year, month });
-            month = parseInt(month, 10) - 3;
-            if (month <= 0) {
-              month += 12;
-              year -= 1;
+        async function loadData() {
+            const listEl = document.getElementById("transactionList");
+            const filter = document.getElementById("riwayatSelect").value;
+            listEl.innerHTML = '<tr><td colspan="4" style="text-align:center">Memuat data...</td></tr>';
+
+            try {
+                // Sederhanakan logika filter bulan
+                let targetMonth = parseInt(state.month) - parseInt(filter);
+                let targetYear = state.year;
+                if (targetMonth <= 0) { targetMonth += 12; targetYear--; }
+
+                const res = await fetch(`/api/transactions?year=${targetYear}&month=${targetMonth.toString().padStart(2, '0')}`);
+                const json = await res.json();
+
+                if (json.success) {
+                    document.getElementById("currentMonthYear").textContent = `${targetMonth}-${targetYear}`;
+                    document.getElementById("income").textContent = formatIDR(json.summary.totalIncome);
+                    document.getElementById("outcome").textContent = formatIDR(json.summary.totalOutcome);
+                    document.getElementById("balance").textContent = formatIDR(json.summary.balance);
+
+                    listEl.innerHTML = json.data.length ? "" : '<tr><td colspan="4" style="text-align:center; color:#64748b">Tidak ada data transaksi</td></tr>';
+                    
+                    json.data.forEach(t => {
+                        const row = document.createElement("tr");
+                        const status = t.status.toLowerCase();
+                        row.innerHTML = `
+                            <td style="color:var(--text-muted)">${t.transactionDate}</td>
+                            <td><span class="status-badge ${status}">${status}</span></td>
+                            <td style="font-weight:600; color:${status === 'income' ? 'var(--success)' : 'var(--danger)'}">${formatIDR(t.nominal || t.amount)}</td>
+                            <td>${t.description || '-'}</td>
+                        `;
+                        listEl.appendChild(row);
+                    });
+                }
+            } catch (e) {
+                listEl.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--danger)">Gagal memuat data</td></tr>';
             }
-            console.log("adjusted to:", year, month);
-          }
+        }
 
-          if (riwayat == 1) {
-            month = parseInt(month, 10) - 1;
-            if (month <= 0) {
-              month += 12;
-              year -= 1;
+        // --- Event Listeners ---
+        document.getElementById("addTransactionForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const msg = document.getElementById("addMessage");
+            const payload = {
+                nominal: parseFloat(document.getElementById("nominal").value),
+                transactionsDate: document.getElementById("date").value,
+                status: document.getElementById("status").value,
+                description: document.getElementById("description").value
+            };
+
+            try {
+                const res = await fetch("/api/transactions", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+                const json = await res.json();
+                if (json.success) {
+                    msg.innerHTML = '<div style="color:var(--success); font-size:0.8rem; margin-bottom:1rem">✓ Berhasil disimpan</div>';
+                    document.getElementById("addTransactionForm").reset();
+                    setType('income');
+                    loadData();
+                }
+            } catch (e) {
+                msg.innerHTML = '<div style="color:var(--danger)">Gagal mengirim data</div>';
             }
-          }
+        });
 
-          const response = await fetch(
-            `/api/transactions?year=${year}&month=${month}`,
-          );
-
-          if (!response.ok) {
-            transactionList.innerHTML = "<li>Gagal Memuat Transaksi.</li>";
-            return;
-          }
-          const json = await response.json().catch(() => ({}));
-          const { success, data = [], summary = {} } = json;
-
-          if (success) {
-            incomeEl.textContent = formatRupiah(summary.totalIncome || 0);
-            outcomeEl.textContent = formatRupiah(summary.totalOutcome || 0);
-            balanceEl.textContent = formatRupiah(summary.balance || 0);
-
-            transactionList.innerHTML = "";
-            if (!data || data.length === 0) {
-              transactionList.innerHTML =
-                "<li>Belum ada Transaksi di bulan ini.</li>";
-            } else {
-              transactionList.innerHTML = "";
-
-              data.forEach((t, i) => {
-                const tr = document.createElement("tr");
-
-                const status = (t.status || "").toLowerCase();
-                const nominalFormatted = formatRupiah(
-                  t.nominal || t.amount || 0,
-                );
-
-                tr.style.animationDelay = `${i * 0.05}s`;
-
-                tr.innerHTML = `
-    <td data-label="Tanggal">${t.transactionDate || "-"}</td>
-    <td data-label="Status">
-      <span class="status ${status}">
-        ${status.toUpperCase()}
-      </span>
-    </td>
-    <td data-label="Nominal" class="nominal ${status}">
-      ${nominalFormatted}
-    </td>
-    <td data-label="Keterangan">
-      ${t.description || "-"}
-    </td>
-  `;
-
-                transactionList.appendChild(tr);
-              });
-            }
-          } else {
-            transactionList.innerHTML = "<li>Gagal Memuat Transaksi.</li>";
-          }
-          // } else {
-          //   console.error("gagal fetchTransactions", error);
-          //   transactionList.innerHTML =
-          //     "<li>error jaringan saat memuat data</li>";
-          // }
-        } catch (error) {
-          console.error("gagal fetchTransactions", error);
-          transactionList.innerHTML =
-            "<li>error jaringan saat memuat data</li>";
-        }
-      };
-
-      addTransactionForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const nominal = document.getElementById("nominal").value;
-        const transactionsDate = document.getElementById("date").value;
-        const status = document.getElementById("status").value;
-        const description = document.getElementById("description").value;
-
-        if (!nominal || !transactionsDate || !status) {
-          addMessageDiv.style.color = "red";
-          addMessageDiv.textContent =
-            "Semua field wajib diisi (kecuali keterangan).";
-          return;
-        }
-
-        try {
-          const response = await fetch("/api/transactions", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              nominal: parseFloat(nominal),
-              transactionsDate,
-              status,
-              description,
-            }),
-          });
-
-          const json = await response.json().catch(() => ({}));
-          const { success, message } = json;
-
-          if ((response.status === 201 || response.ok) && success) {
-            addMessageDiv.style.color = "green";
-            addMessageDiv.textContent = "✅ Transaksi berhasil ditambahkan!";
-            addTransactionForm.reset();
-            fetchTransactions(CURRENT_YEAR, CURRENT_MONTH);
-          } else {
-            addMessageDiv.style.color = "red";
-            addMessageDiv.textContent = message || "Gagal menambah transaksi.";
-          }
-        } catch (error) {
-          console.error("Gagal menambah transaksi:", error);
-          addMessageDiv.style.color = "red";
-          addMessageDiv.textContent = "Error jaringan saat menambah transaksi.";
-        }
-      });
-
-      (async () => {
-        const user = await checkAuth();
-        if (user) {
-          fetchTransactions(CURRENT_YEAR, CURRENT_MONTH);
-        }
-      })();
+        // Bootstrap
+        (async () => {
+            if (await checkAuth()) loadData();
+        })();
     </script>
-  </body>
+</body>
 </html>
