@@ -4,17 +4,208 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Logging Out...</title>
+
+    <!-- FONT INTER -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+      :root {
+        --bg: #020617;
+        --card: rgba(255, 255, 255, 0.08);
+        --border: rgba(255, 255, 255, 0.15);
+        --text: #e5e7eb;
+        --muted: #9ca3af;
+        --primary: #38bdf8;
+        --radius: 18px;
+      }
+
+      * {
+        box-sizing: border-box;
+        font-family: "Inter", system-ui, sans-serif;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #020617, #0f172a);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text);
+        overflow: hidden;
+      }
+
+      .logout-card {
+        width: 100%;
+        max-width: 420px;
+        padding: 36px 30px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        backdrop-filter: blur(16px);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45);
+        text-align: center;
+        animation: fadeScale 0.6s ease;
+        position: relative;
+      }
+
+      h1 {
+        font-size: 1.4rem;
+        margin-bottom: 8px;
+      }
+
+      p {
+        font-size: 0.95rem;
+        color: var(--muted);
+        margin-bottom: 28px;
+      }
+
+      /* ===== ADVANCED LOADER ===== */
+      .loader {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto;
+        position: relative;
+      }
+
+      .loader span {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        border: 3px solid transparent;
+        border-top-color: var(--primary);
+        animation: spin 1.4s linear infinite;
+      }
+
+      .loader span:nth-child(2) {
+        inset: 8px;
+        border-top-color: #22c55e;
+        animation-duration: 1.8s;
+      }
+
+      .loader span:nth-child(3) {
+        inset: 16px;
+        border-top-color: #a855f7;
+        animation-duration: 2.2s;
+      }
+
+      /* Floating dots */
+      .dots {
+        margin-top: 22px;
+        font-size: 1.1rem;
+        letter-spacing: 3px;
+      }
+
+      .dots span {
+        animation: blink 1.4s infinite both;
+      }
+
+      .dots span:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+
+      .dots span:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+
+      /* BACKGROUND GLOW */
+      .glow {
+        position: absolute;
+        width: 280px;
+        height: 280px;
+        background: radial-gradient(
+          circle,
+          rgba(56, 189, 248, 0.25),
+          transparent 70%
+        );
+        top: -80px;
+        right: -80px;
+        filter: blur(40px);
+        animation: float 6s ease-in-out infinite;
+        z-index: -1;
+      }
+
+      /* ANIMATIONS */
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes blink {
+        0%,
+        80%,
+        100% {
+          opacity: 0;
+        }
+        40% {
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadeScale {
+        from {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(18px);
+        }
+        100% {
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 480px) {
+        .logout-card {
+          margin: 0 16px;
+          padding: 30px 24px;
+        }
+      }
+    </style>
   </head>
+
   <body>
-    <h1>Anda sedang keluar...</h1>
+    <div class="logout-card">
+      <div class="glow"></div>
+
+      <h1>🚪 Logging Out</h1>
+      <p>Anda sedang keluar dari aplikasi, mohon tunggu</p>
+
+      <div class="loader">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+      <div class="dots">
+        <span>.</span><span>.</span><span>.</span>
+      </div>
+    </div>
+
     <script>
       (async () => {
         try {
-            await fetch('/api/logout', {method: 'POST'});
+          await fetch("/api/logout", { method: "POST" });
         } catch (error) {
-            console.error('logout failed', error);
+          console.error("logout failed", error);
         } finally {
-            window.location.href = '/login/';
+          // Delay kecil biar animasi terasa smooth
+          setTimeout(() => {
+            window.location.href = "/login/";
+          }, 2000);
         }
       })();
     </script>

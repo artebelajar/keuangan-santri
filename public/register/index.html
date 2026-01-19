@@ -3,21 +3,164 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Register akun baru</title>
+    <title>Register Akun Baru</title>
+
+    <!-- FONT INTER -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+      :root {
+        --bg: #020617;
+        --card: rgba(255, 255, 255, 0.08);
+        --border: rgba(255, 255, 255, 0.15);
+        --text: #e5e7eb;
+        --muted: #9ca3af;
+        --primary: #38bdf8;
+        --success: #22c55e;
+        --danger: #ef4444;
+        --radius: 16px;
+      }
+
+      * {
+        box-sizing: border-box;
+        font-family: "Inter", system-ui, sans-serif;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #020617, #0f172a);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text);
+      }
+
+      .container {
+        width: 100%;
+        max-width: 380px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 32px 28px;
+        backdrop-filter: blur(14px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+        animation: fadeUp 0.6s ease;
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 22px;
+        font-size: 1.4rem;
+        font-weight: 700;
+      }
+
+      #message {
+        text-align: center;
+        margin-bottom: 14px;
+        font-size: 0.9rem;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      input {
+        padding: 14px 16px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: rgba(15, 23, 42, 0.8);
+        color: var(--text);
+        font-size: 0.95rem;
+        outline: none;
+        transition: border-color 0.2s ease;
+      }
+
+      input::placeholder {
+        color: var(--muted);
+      }
+
+      input:focus {
+        border-color: var(--primary);
+      }
+
+      button {
+        margin-top: 10px;
+        padding: 14px;
+        border-radius: 12px;
+        border: none;
+        background: linear-gradient(135deg, #38bdf8, #2563eb);
+        color: white;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 25px rgba(56, 189, 248, 0.4);
+      }
+
+      p {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+
+      a {
+        color: var(--primary);
+        font-weight: 600;
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 480px) {
+        .container {
+          margin: 0 16px;
+          padding: 28px 22px;
+        }
+      }
+    </style>
   </head>
+
   <body>
     <div class="container">
       <h1>Register Akun Baru</h1>
+
       <div id="message"></div>
+
       <form action="" id="registrationForm">
         <input type="text" id="username" placeholder="Username" required />
-        <br />
         <input type="password" id="password" placeholder="Password" required />
-        <br />
         <button type="submit">Daftar</button>
       </form>
-      <p>Sudah punya akun? <a href="/login/">Login di sini</a></p>
+
+      <p>
+        Sudah punya akun?
+        <a href="/login/">Login di sini</a>
+      </p>
     </div>
+
     <script>
       const form = document.getElementById("registrationForm");
       const messageDiv = document.getElementById("message");
@@ -26,28 +169,30 @@
         e.preventDefault();
         const username = document.getElementById("username").value;
         const password = document.getElementById("password").value;
-        console.log(username, password);
 
         try {
           const response = await fetch("/api/register", {
             method: "POST",
-            headers: { 'Content-Type': "application/json" },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username, password }),
           });
 
           const result = await response.json();
 
-          console.log(result)
-
-          if(result.success === true){
-            messageDiv.style.color = 'green';
-            messageDiv.innerHTML = 'Registrasi berhasil** silahkan <a href="/login/">login</a>.';
+          if (result.success === true) {
+            messageDiv.style.color = "var(--success)";
+            messageDiv.innerHTML =
+              'Registrasi berhasil. Silakan <a href="/login/">login</a>.';
             form.reset();
-          }else{
-            messageDiv.textContent = result.message || 'Registrasi Gagal';
+          } else {
+            messageDiv.style.color = "var(--danger)";
+            messageDiv.textContent =
+              result.message || "Registrasi gagal";
           }
         } catch (error) {
-          messageDiv.textContent = 'terjadi kesalahan jaringan. Silahkan coba lagi.';
+          messageDiv.style.color = "var(--danger)";
+          messageDiv.textContent =
+            "Terjadi kesalahan jaringan. Silakan coba lagi.";
         }
       });
     </script>

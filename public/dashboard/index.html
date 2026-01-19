@@ -1,24 +1,483 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard Keuangan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --bg: #0f172a;
+        --card: rgba(255, 255, 255, 0.08);
+        --border: rgba(255, 255, 255, 0.15);
+        --text: #e5e7eb;
+        --muted: #9ca3af;
+        --primary: #38bdf8;
+        --income: #22c55e;
+        --outcome: #ef4444;
+        --radius: 14px;
+        --blur: blur(12px);
+      }
+
+      * {
+        box-sizing: border-box;
+        font-family:
+          "Inter",
+          system-ui,
+          -apple-system,
+          sans-serif;
+      }
+
+      body {
+        margin: 0;
+        background: linear-gradient(135deg, #020617, #0f172a);
+        color: var(--text);
+        min-height: 100vh;
+      }
+
+      header {
+        padding: 24px 32px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--border);
+        background: rgba(15, 23, 42, 0.7);
+        backdrop-filter: var(--blur);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+
+      header h1 {
+        margin: 0;
+        font-size: 1.4rem;
+      }
+
+      header a {
+        color: #f87171;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      main {
+        max-width: 900px;
+        margin: 32px auto;
+        padding: 0 20px;
+        display: grid;
+        gap: 32px;
+      }
+
+      h2 {
+        margin-bottom: 12px;
+        font-size: 1.2rem;
+      }
+
+      hr {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 24px 0;
+      }
+
+      /* CARD */
+      #summary,
+      form,
+      #transactionList {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 20px;
+        backdrop-filter: var(--blur);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      #summary p,
+      #summary h3 {
+        margin: 8px 0;
+      }
+
+      #income {
+        color: var(--income);
+      }
+
+      #outcome {
+        color: var(--outcome);
+      }
+
+      #balance {
+        color: var(--primary);
+      }
+
+      /* FORM */
+      form label {
+        display: block;
+        margin-top: 14px;
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+
+      form input,
+      form select {
+        width: 100%;
+        margin-top: 6px;
+        padding: 12px 14px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: rgba(15, 23, 42, 0.8);
+        color: var(--text);
+        outline: none;
+      }
+
+      form input:focus,
+      form select:focus {
+        border-color: var(--primary);
+      }
+
+      button {
+        margin-top: 20px;
+        width: 100%;
+        padding: 14px;
+        border-radius: 12px;
+        border: none;
+        background: linear-gradient(135deg, #38bdf8, #2563eb);
+        color: white;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition:
+          transform 0.15s ease,
+          box-shadow 0.15s ease;
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(56, 189, 248, 0.4);
+      }
+
+      /* MESSAGE */
+      #addMessage {
+        margin-bottom: 12px;
+        font-weight: 600;
+      }
+
+      /* TRANSACTION LIST */
+      #transactionList {
+        list-style: none;
+        padding: 0;
+      }
+
+      #transactionList li {
+        padding: 12px 10px;
+        border-bottom: 1px solid var(--border);
+        font-size: 0.95rem;
+      }
+
+      #transactionList li:last-child {
+        border-bottom: none;
+      }
+
+      /* SELECT RIWAYAT */
+      #riwayatForm {
+        margin-bottom: 12px;
+      }
+
+      /* RESPONSIVE */
+      @media (max-width: 600px) {
+        header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 10px;
+        }
+
+        main {
+          margin: 20px auto;
+        }
+      }
+
+      /* SUMMARY FLEX */
+      .summary-flex {
+        display: flex;
+        gap: 20px;
+        justify-content: space-between;
+      }
+
+      .summary-card {
+        flex: 1;
+        padding: 20px;
+        border-radius: 16px;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.12),
+          rgba(255, 255, 255, 0.03)
+        );
+        border: 1px solid var(--border);
+        backdrop-filter: blur(12px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+        transition: transform 0.2s ease;
+      }
+
+      .summary-card:hover {
+        transform: translateY(-4px);
+      }
+
+      .summary-card .label {
+        font-size: 0.85rem;
+        color: var(--muted);
+        letter-spacing: 0.5px;
+      }
+
+      .summary-card strong {
+        display: block;
+        margin-top: 8px;
+        font-size: 1.5rem;
+      }
+
+      /* COLOR ACCENT */
+      .summary-card.income {
+        border-left: 4px solid var(--income);
+      }
+
+      .summary-card.outcome {
+        border-left: 4px solid var(--outcome);
+      }
+
+      .summary-card.balance {
+        border-left: 4px solid var(--primary);
+      }
+
+      /* RESPONSIVE */
+      @media (max-width: 700px) {
+        .summary-flex {
+          flex-direction: column;
+        }
+      }
+
+      /* TABLE WRAPPER */
+      .table-wrapper {
+        overflow-x: auto;
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        background: var(--card);
+        backdrop-filter: blur(12px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      /* TABLE */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      thead {
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      th,
+      td {
+        padding: 14px 16px;
+        text-align: left;
+      }
+
+      th {
+        font-size: 0.85rem;
+        color: var(--muted);
+        letter-spacing: 0.4px;
+      }
+
+      tbody tr {
+        border-top: 1px solid var(--border);
+        animation: fadeSlide 0.4s ease forwards;
+      }
+
+      tbody tr:hover {
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      /* STATUS BADGE */
+      .status {
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        width: fit-content;
+      }
+
+      .status.income {
+        background: rgba(34, 197, 94, 0.15);
+        color: var(--income);
+      }
+
+      .status.outcome {
+        background: rgba(239, 68, 68, 0.15);
+        color: var(--outcome);
+      }
+
+      /* NOMINAL */
+      .nominal.income {
+        color: var(--income);
+        font-weight: 600;
+      }
+
+      .nominal.outcome {
+        color: var(--outcome);
+        font-weight: 600;
+      }
+
+      /* LOADING */
+      .loading {
+        text-align: center;
+        padding: 24px;
+        color: var(--muted);
+      }
+
+      /* ANIMATION */
+      @keyframes fadeSlide {
+        from {
+          opacity: 0;
+          transform: translateY(6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* MOBILE MODE */
+      @media (max-width: 700px) {
+        table,
+        thead {
+          display: none;
+        }
+
+        tbody tr {
+          display: block;
+          margin-bottom: 14px;
+          border-radius: 14px;
+          padding: 14px;
+          background: rgba(255, 255, 255, 0.05);
+        }
+
+        tbody td {
+          display: flex;
+          justify-content: space-between;
+          padding: 6px 0;
+          border: none;
+        }
+
+        tbody td::before {
+          content: attr(data-label);
+          color: var(--muted);
+          font-size: 0.8rem;
+        }
+      }
+      /* NAVBAR */
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 18px 28px;
+        background: rgba(15, 23, 42, 0.75);
+        backdrop-filter: blur(14px);
+        border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .nav-left h1 {
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: 700;
+        letter-spacing: 0.4px;
+      }
+
+      .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .welcome {
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+
+      .logout {
+        padding: 8px 14px;
+        border-radius: 999px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #fff;
+        text-decoration: none;
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        transition:
+          transform 0.15s ease,
+          box-shadow 0.15s ease;
+      }
+
+      .logout:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
+      }
+
+      /* MOBILE NAVBAR */
+      @media (max-width: 600px) {
+        .navbar {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 10px;
+          padding: 16px 20px;
+        }
+
+        .nav-right {
+          width: 100%;
+          justify-content: space-between;
+        }
+
+        .welcome {
+          font-size: 0.85rem;
+        }
+      }
+    </style>
   </head>
   <body>
-    <header>
-      <h1>Halo, <span id="username">Pengguna</span>!</h1>
-      <a href="/logout/">Logout</a>
-      <hr />
+    <header class="navbar">
+      <div class="nav-left">
+        <h1></h1>
+      </div>
+
+      <div class="nav-right">
+        <span class="welcome"
+          >Halo, <strong id="username">Pengguna</strong></span
+        >
+        <a href="/logout/" class="logout">Logout</a>
+      </div>
     </header>
 
     <main>
       <h2>Ringkasan Bulan ini (<span id="currentMonthYear"></span>)</h2>
-      <div id="summary">
-        <p>Pemasukan (Income): <strong id="income"></strong></p>
-        <p>Pengeluaran (Outcome): <strong id="outcome"></strong></p>
-        <h3>Sisa Saldo (balance): <strong id="balance"></strong></h3>
+      <div id="summary" class="summary-flex">
+        <div class="summary-card income">
+          <span class="label">Income</span>
+          <strong id="income">Rp 0</strong>
+        </div>
+
+        <div class="summary-card outcome">
+          <span class="label">Outcome</span>
+          <strong id="outcome">Rp 0</strong>
+        </div>
+
+        <div class="summary-card balance">
+          <span class="label">Balance</span>
+          <strong id="balance">Rp 0</strong>
+        </div>
       </div>
+
       <hr />
       <h2>Input Transaksi Baru</h2>
       <div id="addMessage"></div>
@@ -67,9 +526,23 @@
         </select>
         <!-- <button type="submit">Tampilkan Riwayat</button> -->
       </form>
-      <ul id="transactionList">
-        <li>Memuat Data...</li>
-      </ul>
+      <div class="table-wrapper">
+        <table id="transactionTable">
+          <thead>
+            <tr>
+              <th>Tanggal</th>
+              <th>Status</th>
+              <th>Nominal</th>
+              <th>Keterangan</th>
+            </tr>
+          </thead>
+          <tbody id="transactionList">
+            <tr>
+              <td colspan="4" class="loading">Memuat Data...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </main>
 
     <script>
@@ -156,7 +629,7 @@
           }
 
           const response = await fetch(
-            `/api/transactions?year=${year}&month=${month}`
+            `/api/transactions?year=${year}&month=${month}`,
           );
 
           if (!response.ok) {
@@ -176,20 +649,34 @@
               transactionList.innerHTML =
                 "<li>Belum ada Transaksi di bulan ini.</li>";
             } else {
-              data.forEach((t) => {
-                const li = document.createElement("li");
+              transactionList.innerHTML = "";
+
+              data.forEach((t, i) => {
+                const tr = document.createElement("tr");
+
+                const status = (t.status || "").toLowerCase();
                 const nominalFormatted = formatRupiah(
-                  t.nominal || t.amount || 0
+                  t.nominal || t.amount || 0,
                 );
-                const color =
-                  (t.status || "").toLowerCase() === "income" ? "green" : "red";
-                const dateStr = t.transactionDate || t.transactionDate || "-";
-                li.innerHTML = `<strong>[${(
-                  t.status || "-"
-                ).toUpperCase()}]</strong> ${dateStr}: <span style="color: ${color};">${nominalFormatted}</span> - ${
-                  t.description || "-"
-                }`;
-                transactionList.appendChild(li);
+
+                tr.style.animationDelay = `${i * 0.05}s`;
+
+                tr.innerHTML = `
+    <td data-label="Tanggal">${t.transactionDate || "-"}</td>
+    <td data-label="Status">
+      <span class="status ${status}">
+        ${status.toUpperCase()}
+      </span>
+    </td>
+    <td data-label="Nominal" class="nominal ${status}">
+      ${nominalFormatted}
+    </td>
+    <td data-label="Keterangan">
+      ${t.description || "-"}
+    </td>
+  `;
+
+                transactionList.appendChild(tr);
               });
             }
           } else {
