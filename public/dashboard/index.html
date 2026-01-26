@@ -1,409 +1,734 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CuanKu - Dashboard Keuangan Profesional</title>
-    
+    <link rel="icon" href="/favicon.ico" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
-        :root {
-            --bg-body: #020617;
-            --bg-card: rgba(30, 41, 59, 0.5);
-            --border: rgba(255, 255, 255, 0.1);
-            --primary: #38bdf8;
-            --success: #22c55e;
-            --danger: #ef4444;
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            --glass: blur(12px);
-        }
+      :root {
+        --bg-body: #020617;
+        --bg-card: rgba(30, 41, 59, 0.5);
+        --border: rgba(255, 255, 255, 0.1);
+        --primary: #38bdf8;
+        --success: #22c55e;
+        --danger: #ef4444;
+        --warning: #f59e0b;
+        --text-main: #f1f5f9;
+        --text-muted: #94a3b8;
+        --glass: blur(12px);
+      }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Plus Jakarta Sans", sans-serif;
+      }
 
-        body {
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            min-height: 100vh;
-            background-image: radial-gradient(circle at top right, rgba(56, 189, 248, 0.1), transparent),
-                              radial-gradient(circle at bottom left, rgba(34, 197, 94, 0.05), transparent);
-        }
+      body {
+        background-color: var(--bg-body);
+        color: var(--text-main);
+        min-height: 100vh;
+        background-image:
+          radial-gradient(
+            circle at top right,
+            rgba(56, 189, 248, 0.1),
+            transparent
+          ),
+          radial-gradient(
+            circle at bottom left,
+            rgba(34, 197, 94, 0.05),
+            transparent
+          );
+      }
 
-        /* --- LAYOUT COMPONENTS --- */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
 
-        header {
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: var(--glass);
-            border-bottom: 1px solid var(--border);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+      header {
+        background: rgba(15, 23, 42, 0.8);
+        backdrop-filter: var(--glass);
+        border-bottom: 1px solid var(--border);
+        padding: 1rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
 
-        .nav-wrapper {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+      .nav-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .logo {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: var(--primary);
+      }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 800;
-            letter-spacing: -1px;
-            color: var(--primary);
-        }
+      .btn-logout {
+        padding: 0.5rem 1rem;
+        border-radius: 99px;
+        background: rgba(239, 68, 68, 0.1);
+        color: var(--danger);
+        text-decoration: none;
+        font-size: 0.8rem;
+        font-weight: 600;
+        border: 1px solid rgba(239, 68, 68, 0.2);
+        transition: 0.3s;
+      }
+      .btn-logout:hover {
+        background: var(--danger);
+        color: white;
+      }
 
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .btn-logout {
-            padding: 0.5rem 1rem;
-            border-radius: 99px;
-            background: rgba(239, 68, 68, 0.1);
-            color: var(--danger);
-            text-decoration: none;
-            font-size: 0.8rem;
-            font-weight: 600;
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            transition: 0.3s;
-        }
-
-        .btn-logout:hover { background: var(--danger); color: white; }
-
-        /* --- DASHBOARD GRID --- */
+      .main-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 2rem 0;
+      }
+      @media (min-width: 1024px) {
         .main-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2rem;
-            padding: 2rem 0;
+          grid-template-columns: 380px 1fr;
         }
+      }
 
-        @media (min-width: 1024px) {
-            .main-grid { grid-template-columns: 380px 1fr; }
-        }
+      .card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 1.5rem;
+        backdrop-filter: var(--glass);
+      }
 
-        /* --- CARDS --- */
-        .card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 1.5rem;
-            backdrop-filter: var(--glass);
-        }
+      /* Summary */
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+      .summary-item {
+        padding: 1.5rem;
+        border-radius: 16px;
+        border-left: 4px solid var(--primary);
+        background: rgba(255, 255, 255, 0.02);
+      }
+      .summary-item.income {
+        border-color: var(--success);
+      }
+      .summary-item.outcome {
+        border-color: var(--danger);
+      }
+      .summary-label {
+        color: var(--text-muted);
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        font-weight: 600;
+      }
+      .summary-value {
+        display: block;
+        font-size: 1.4rem;
+        font-weight: 700;
+        margin-top: 0.5rem;
+      }
 
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
+      /* Forms */
+      .type-pill {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        background: rgba(0, 0, 0, 0.2);
+        padding: 4px;
+        border-radius: 12px;
+        margin-bottom: 1.5rem;
+      }
+      .pill-btn {
+        padding: 10px;
+        text-align: center;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        transition: 0.3s;
+      }
+      .pill-btn.active.income {
+        background: var(--success);
+        color: white;
+      }
+      .pill-btn.active.outcome {
+        background: var(--danger);
+        color: white;
+      }
 
-        .summary-item {
-            padding: 1.5rem;
-            border-radius: 16px;
-            border-left: 4px solid var(--primary);
-            background: rgba(255,255,255,0.02);
-        }
+      .input-group {
+        margin-bottom: 1.2rem;
+      }
+      .input-group label {
+        display: block;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        margin-bottom: 6px;
+      }
+      input {
+        width: 100%;
+        padding: 12px 16px;
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        color: white;
+        outline: none;
+      }
+      input:focus {
+        border-color: var(--primary);
+      }
 
-        .summary-item.income { border-color: var(--success); }
-        .summary-item.outcome { border-color: var(--danger); }
+      .btn-submit {
+        width: 100%;
+        padding: 14px;
+        background: var(--primary);
+        border: none;
+        border-radius: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        transition: 0.3s;
+      }
 
-        .summary-label { color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 600; }
-        .summary-value { display: block; font-size: 1.4rem; font-weight: 700; margin-top: 0.5rem; }
+      /* Table */
+      .table-wrapper {
+        overflow-x: auto;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th {
+        text-align: left;
+        padding: 12px;
+        color: var(--text-muted);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        border-bottom: 1px solid var(--border);
+      }
+      td {
+        padding: 16px 12px;
+        border-bottom: 1px solid var(--border);
+        font-size: 0.9rem;
+      }
 
-        /* --- FORM UPGRADE --- */
-        .form-title { font-size: 1.1rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px; }
-        
-        .type-pill {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            background: rgba(0,0,0,0.2);
-            padding: 4px;
-            border-radius: 12px;
+      .status-badge {
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 0.7rem;
+        font-weight: 700;
+      }
+      .status-badge.income {
+        background: rgba(34, 197, 94, 0.1);
+        color: var(--success);
+      }
+      .status-badge.outcome {
+        background: rgba(239, 68, 68, 0.1);
+        color: var(--danger);
+      }
+
+      /* Action Buttons */
+      .action-group {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+      }
+      .btn-action-delete,
+      .btn-action-edit {
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 10px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.2s;
+        border: 1px solid transparent;
+      }
+      .btn-action-delete {
+        background: rgba(239, 68, 68, 0.1);
+        color: var(--danger);
+        border-color: rgba(239, 68, 68, 0.2);
+      }
+      .btn-action-delete:hover {
+        background: var(--danger);
+        color: white;
+      }
+
+      .btn-action-edit {
+        background: rgba(56, 189, 248, 0.1);
+        color: var(--primary);
+        border-color: rgba(56, 189, 248, 0.2);
+      }
+      .btn-action-edit:hover {
+        background: var(--primary);
+        color: #020617;
+      }
+
+      /* MODAL STYLING */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(2, 6, 23, 0.8);
+        backdrop-filter: blur(4px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+      }
+      .modal-content {
+        background: #1e293b;
+        border: 1px solid var(--border);
+        width: 90%;
+        max-width: 400px;
+        border-radius: 20px;
+        padding: 2rem;
+        position: relative;
+      }
+      .close-modal {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        cursor: pointer;
+        color: var(--text-muted);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="modal-overlay" id="editModal">
+      <div class="modal-content">
+        <div class="close-modal" onclick="closeEditModal()">
+          <i data-lucide="x"></i>
+        </div>
+        <h3
+          style="
             margin-bottom: 1.5rem;
-        }
-
-        .pill-btn {
-            padding: 10px;
-            text-align: center;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            transition: 0.3s;
-        }
-
-        .pill-btn.active.income { background: var(--success); color: white; }
-        .pill-btn.active.outcome { background: var(--danger); color: white; }
-
-        .input-group { margin-bottom: 1.2rem; }
-        .input-group label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; }
-        
-        input {
-            width: 100%;
-            padding: 12px 16px;
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            color: white;
-            outline: none;
-            transition: 0.3s;
-        }
-
-        input:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.1); }
-
-        .btn-submit {
-            width: 100%;
-            padding: 14px;
-            background: var(--primary);
-            border: none;
-            border-radius: 12px;
-            color: #020617;
-            font-weight: 700;
-            cursor: pointer;
             display: flex;
             align-items: center;
-            justify-content: center;
             gap: 10px;
-            transition: 0.3s;
-        }
-
-        .btn-submit:hover { opacity: 0.9; transform: translateY(-2px); }
-
-        /* --- TABLE STYLE --- */
-        .table-wrapper { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; padding: 12px; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; border-bottom: 1px solid var(--border); }
-        td { padding: 16px 12px; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
-        
-        .status-badge {
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 0.7rem;
-            font-weight: 700;
-        }
-        .status-badge.income { background: rgba(34, 197, 94, 0.1); color: var(--success); }
-        .status-badge.outcome { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
-
-    </style>
-</head>
-<body>
+          "
+        >
+          <i data-lucide="edit-3" size="18"></i> Edit Transaksi
+        </h3>
+        <form id="editTransactionForm">
+          <input type="hidden" id="edit-id" />
+          <div class="type-pill">
+            <div
+              class="pill-btn"
+              id="edit-pillIncome"
+              onclick="setEditType('income')"
+            >
+              Pemasukan
+            </div>
+            <div
+              class="pill-btn"
+              id="edit-pillOutcome"
+              onclick="setEditType('outcome')"
+            >
+              Pengeluaran
+            </div>
+          </div>
+          <input type="hidden" id="edit-status" />
+          <div class="input-group">
+            <label>Nominal</label>
+            <input type="number" id="edit-nominal" required />
+          </div>
+          <div class="input-group">
+            <label>Tanggal</label>
+            <input type="date" id="edit-date" required />
+          </div>
+          <div class="input-group">
+            <label>Keterangan</label>
+            <input type="text" id="edit-description" />
+          </div>
+          <button
+            type="submit"
+            class="btn-submit"
+            style="background: var(--warning)"
+          >
+            Simpan Perubahan <i data-lucide="check" size="16"></i>
+          </button>
+        </form>
+      </div>
+    </div>
 
     <header>
-        <div class="container nav-wrapper">
-            <div class="logo">CUANKU.</div>
-            <div class="user-menu">
-                <span class="text-muted">Halo, <strong id="username" style="color: white;">...</strong></span>
-                <a href="/logout/" class="btn-logout">Logout</a>
-            </div>
+      <div class="container nav-wrapper">
+        <div class="logo">CUANKU.</div>
+        <div class="user-menu">
+          <span class="text-muted"
+            >Halo, <strong id="username" style="color: white">...</strong></span
+          >
+          <a href="/logout/" class="btn-logout">Logout</a>
         </div>
+      </div>
     </header>
 
     <main class="container">
-        <div style="margin-top: 2rem;">
-            <h2 style="margin-bottom: 1.5rem; font-size: 1.25rem;">Ikhtisar <span id="currentMonthYear" style="color: var(--primary);"></span></h2>
-            <div class="summary-grid">
-                <div class="summary-item income">
-                    <span class="summary-label">Pemasukan</span>
-                    <span class="summary-value" id="income">Rp 0</span>
+      <div style="margin-top: 2rem">
+        <h2 style="margin-bottom: 1.5rem; font-size: 1.25rem">
+          Ikhtisar
+          <span id="currentMonthYear" style="color: var(--primary)"></span>
+        </h2>
+        <div class="summary-grid">
+          <div class="summary-item income">
+            <span class="summary-label">Pemasukan</span
+            ><span class="summary-value" id="income">Rp 0</span>
+          </div>
+          <div class="summary-item outcome">
+            <span class="summary-label">Pengeluaran</span
+            ><span class="summary-value" id="outcome">Rp 0</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Saldo Saat Ini</span
+            ><span class="summary-value" id="balance">Rp 0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="main-grid">
+        <section>
+          <div class="card">
+            <h3
+              style="
+                margin-bottom: 1.5rem;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+              "
+            >
+              <i data-lucide="plus-circle" size="18"></i> Transaksi Baru
+            </h3>
+            <div id="addMessage"></div>
+            <form id="addTransactionForm">
+              <div class="type-pill">
+                <div
+                  class="pill-btn active income"
+                  id="pillIncome"
+                  onclick="setType('income')"
+                >
+                  Pemasukan
                 </div>
-                <div class="summary-item outcome">
-                    <span class="summary-label">Pengeluaran</span>
-                    <span class="summary-value" id="outcome">Rp 0</span>
+                <div
+                  class="pill-btn outcome"
+                  id="pillOutcome"
+                  onclick="setType('outcome')"
+                >
+                  Pengeluaran
                 </div>
-                <div class="summary-item">
-                    <span class="summary-label">Saldo Saat Ini</span>
-                    <span class="summary-value" id="balance">Rp 0</span>
-                </div>
+              </div>
+              <input type="hidden" id="status" value="income" />
+              <div class="input-group">
+                <label>Nominal</label
+                ><input type="number" id="nominal" placeholder="0" required />
+              </div>
+              <div class="input-group">
+                <label>Tanggal</label><input type="date" id="date" required />
+              </div>
+              <div class="input-group">
+                <label>Keterangan</label
+                ><input
+                  type="text"
+                  id="description"
+                  placeholder="Contoh: Gaji Pokok"
+                />
+              </div>
+              <button type="submit" class="btn-submit">
+                Simpan Transaksi <i data-lucide="send" size="16"></i>
+              </button>
+            </form>
+          </div>
+        </section>
+
+        <section>
+          <div class="card">
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 1.5rem;
+              "
+            >
+              <h3 style="display: flex; align-items: center; gap: 10px">
+                <i data-lucide="list" size="18"></i> Riwayat
+              </h3>
+              <select
+                id="riwayatSelect"
+                onchange="loadData()"
+                style="
+                  background: none;
+                  color: white;
+                  border: 1px solid var(--border);
+                  padding: 5px;
+                  border-radius: 8px;
+                "
+              >
+                <option value="0">Bulan Ini</option>
+                <option value="1">1 Bulan Lalu</option>
+                <option value="3">3 Bulan Lalu</option>
+              </select>
             </div>
-        </div>
-
-        <div class="main-grid">
-            <section>
-                <div class="card">
-                    <h3 class="form-title"><i data-lucide="plus-circle" size="18"></i> Transaksi Baru</h3>
-                    <div id="addMessage"></div>
-                    
-                    <form id="addTransactionForm">
-                        <div class="type-pill">
-                            <div class="pill-btn active income" id="pillIncome" onclick="setType('income')">Pemasukan</div>
-                            <div class="pill-btn outcome" id="pillOutcome" onclick="setType('outcome')">Pengeluaran</div>
-                        </div>
-                        <input type="hidden" id="status" value="income">
-
-                        <div class="input-group">
-                            <label>Nominal</label>
-                            <input type="number" id="nominal" placeholder="0" required />
-                        </div>
-                        <div class="input-group">
-                            <label>Tanggal</label>
-                            <input type="date" id="date" required />
-                        </div>
-                        <div class="input-group">
-                            <label>Keterangan</label>
-                            <input type="text" id="description" placeholder="Contoh: Gaji Pokok" />
-                        </div>
-                        
-                        <button type="submit" class="btn-submit">
-                            Simpan Transaksi <i data-lucide="send" size="16"></i>
-                        </button>
-                    </form>
-                </div>
-            </section>
-
-            <section>
-                <div class="card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                        <h3 class="form-title" style="margin:0;"><i data-lucide="list" size="18"></i> Riwayat</h3>
-                        <select id="riwayatSelect" onchange="loadData()" style="background:none; color:white; border:1px solid var(--border); padding: 5px; border-radius: 8px;">
-                            <option value="0">Bulan Ini</option>
-                            <option value="1">1 Bulan Lalu</option>
-                            <option value="3">3 Bulan Lalu</option>
-                        </select>
-                    </div>
-
-                    <div class="table-wrapper">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Tanggal</th>
-                                    <th>Tipe</th>
-                                    <th>Nominal</th>
-                                    <th>Keterangan</th>
-                                </tr>
-                            </thead>
-                            <tbody id="transactionList">
-                                </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-        </div>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Tanggal</th>
+                    <th>Tipe</th>
+                    <th>Nominal</th>
+                    <th>Keterangan</th>
+                    <th style="text-align: center">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="transactionList"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </div>
     </main>
 
     <script>
-        // Init Icons
-        lucide.createIcons();
+      lucide.createIcons();
 
-        const state = {
-            today: new Date(),
-            year: new Date().getFullYear(),
-            month: (new Date().getMonth() + 1).toString().padStart(2, "0")
-        };
+      const state = {
+        year: new Date().getFullYear(),
+        month: (new Date().getMonth() + 1).toString().padStart(2, "0"),
+      };
 
-        // --- UI Logic ---
-        function setType(type) {
-            document.getElementById('status').value = type;
-            document.getElementById('pillIncome').className = `pill-btn ${type === 'income' ? 'active income' : ''}`;
-            document.getElementById('pillOutcome').className = `pill-btn ${type === 'outcome' ? 'active outcome' : ''}`;
-        }
+      const formatIDR = (val) =>
+        new Intl.NumberFormat("id-ID", {
+          style: "currency",
+          currency: "IDR",
+          minimumFractionDigits: 0,
+        }).format(val);
 
-        const formatIDR = (val) => new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 }).format(val);
+      function setType(type) {
+        document.getElementById("status").value = type;
+        document.getElementById("pillIncome").className =
+          `pill-btn ${type === "income" ? "active income" : ""}`;
+        document.getElementById("pillOutcome").className =
+          `pill-btn ${type === "outcome" ? "active outcome" : ""}`;
+      }
 
-        // --- API Logic ---
-        async function checkAuth() {
-            try {
-                const res = await fetch("/api/me");
-                const json = await res.json();
-                if (json.success) {
-                    document.getElementById("username").textContent = json.data.username;
-                    return true;
-                }
-                window.location.href = "/login/";
-            } catch (e) { window.location.href = "/login/"; }
-            return false;
-        }
+      // LOGIKA EDIT MODAL (BARU)
+      function setEditType(type) {
+        document.getElementById("edit-status").value = type;
+        document.getElementById("edit-pillIncome").className =
+          `pill-btn ${type === "income" ? "active income" : ""}`;
+        document.getElementById("edit-pillOutcome").className =
+          `pill-btn ${type === "outcome" ? "active outcome" : ""}`;
+      }
 
-        async function loadData() {
-            const listEl = document.getElementById("transactionList");
-            const filter = document.getElementById("riwayatSelect").value;
-            listEl.innerHTML = '<tr><td colspan="4" style="text-align:center">Memuat data...</td></tr>';
+      function closeEditModal() {
+        document.getElementById("editModal").style.display = "none";
+      }
 
-            try {
-                // Sederhanakan logika filter bulan
-                let targetMonth = parseInt(state.month) - parseInt(filter);
-                let targetYear = state.year;
-                if (targetMonth <= 0) { targetMonth += 12; targetYear--; }
-
-                const res = await fetch(`/api/transactions?year=${targetYear}&month=${targetMonth.toString().padStart(2, '0')}`);
-                const json = await res.json();
-
-                if (json.success) {
-                    document.getElementById("currentMonthYear").textContent = `${targetMonth}-${targetYear}`;
-                    document.getElementById("income").textContent = formatIDR(json.summary.totalIncome);
-                    document.getElementById("outcome").textContent = formatIDR(json.summary.totalOutcome);
-                    document.getElementById("balance").textContent = formatIDR(json.summary.balance);
-
-                    listEl.innerHTML = json.data.length ? "" : '<tr><td colspan="4" style="text-align:center; color:#64748b">Tidak ada data transaksi</td></tr>';
-                    
-                    json.data.forEach(t => {
-                        const row = document.createElement("tr");
-                        const status = t.status.toLowerCase();
-                        row.innerHTML = `
-                            <td style="color:var(--text-muted)">${t.transactionDate}</td>
-                            <td><span class="status-badge ${status}">${status}</span></td>
-                            <td style="font-weight:600; color:${status === 'income' ? 'var(--success)' : 'var(--danger)'}">${formatIDR(t.nominal || t.amount)}</td>
-                            <td>${t.description || '-'}</td>
-                        `;
-                        listEl.appendChild(row);
-                    });
-                }
-            } catch (e) {
-                listEl.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--danger)">Gagal memuat data</td></tr>';
+      async function openEditModal(id) {
+        try {
+          const res = await fetch(`/api/transactions/${id}`);
+          const json = await res.json();
+          if (json.success) {
+            const t = json.data;
+            document.getElementById("edit-id").value = t.id;
+            document.getElementById("edit-nominal").value =
+              t.nominal || t.amount;
+            const rawDate = t.transactionsDate || t.transactionDate || "";
+            if (rawDate) {
+              document.getElementById("edit-date").value = rawDate.substring(
+                0,
+                10,
+              );
             }
+            document.getElementById("edit-description").value =
+              t.description || "";
+            setEditType(t.status.toLowerCase());
+            document.getElementById("editModal").style.display = "flex";
+            lucide.createIcons();
+          }
+        } catch (e) {
+          alert("Gagal mengambil data");
         }
+      }
 
-        // --- Event Listeners ---
-        document.getElementById("addTransactionForm").addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const msg = document.getElementById("addMessage");
-            const payload = {
-                nominal: parseFloat(document.getElementById("nominal").value),
-                transactionsDate: document.getElementById("date").value,
-                status: document.getElementById("status").value,
-                description: document.getElementById("description").value
-            };
+      // LOAD DATA
+      async function loadData() {
+        const listEl = document.getElementById("transactionList");
+        const filter = document.getElementById("riwayatSelect").value;
+        listEl.innerHTML =
+          '<tr><td colspan="5" style="text-align:center">Memuat data...</td></tr>';
 
-            try {
-                const res = await fetch("/api/transactions", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(payload)
-                });
-                const json = await res.json();
-                if (json.success) {
-                    msg.innerHTML = '<div style="color:var(--success); font-size:0.8rem; margin-bottom:1rem">✓ Berhasil disimpan</div>';
-                    document.getElementById("addTransactionForm").reset();
-                    setType('income');
-                    loadData();
-                }
-            } catch (e) {
-                msg.innerHTML = '<div style="color:var(--danger)">Gagal mengirim data</div>';
+        try {
+          let targetMonth = parseInt(state.month) - parseInt(filter);
+          let targetYear = state.year;
+          if (targetMonth <= 0) {
+            targetMonth += 12;
+            targetYear--;
+          }
+
+          const res = await fetch(
+            `/api/transactions?year=${targetYear}&month=${targetMonth.toString().padStart(2, "0")}`,
+          );
+          const json = await res.json();
+
+          if (json.success) {
+            document.getElementById("currentMonthYear").textContent =
+              `${targetMonth}-${targetYear}`;
+            document.getElementById("income").textContent = formatIDR(
+              json.summary.totalIncome,
+            );
+            document.getElementById("outcome").textContent = formatIDR(
+              json.summary.totalOutcome,
+            );
+            document.getElementById("balance").textContent = formatIDR(
+              json.summary.balance,
+            );
+
+            listEl.innerHTML = "";
+            if (json.data.length === 0) {
+              listEl.innerHTML =
+                '<tr><td colspan="5" style="text-align:center; color:#64748b">Tidak ada data transaksi</td></tr>';
+            } else {
+              json.data.forEach((t) => {
+                const row = document.createElement("tr");
+                const status = t.status.toLowerCase();
+                const displayDate = (
+                  t.transactionsDate ||
+                  t.transactionDate ||
+                  ""
+                ).substring(0, 10);
+
+                row.innerHTML = `
+                  <td style="color:var(--text-muted)">${displayDate}</td>
+                  <td><span class="status-badge ${status}">${status}</span></td>
+                  <td style="font-weight:600; color:${status === "income" ? "var(--success)" : "var(--danger)"}">${formatIDR(t.nominal || t.amount)}</td>
+                  <td>${t.description || "-"}</td>
+                  <td>
+                    <div class="action-group">
+                      <button class="btn-action-edit" onclick="openEditModal('${t.id}')" title="Edit"><i data-lucide="edit-3" size="16"></i></button>
+                      <button class="btn-action-delete" onclick="deleteTransaction('${t.id}')" title="Hapus"><i data-lucide="trash-2" size="16"></i></button>
+                    </div>
+                  </td>
+                `;
+                listEl.appendChild(row);
+              });
+              lucide.createIcons();
             }
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      // SUBMIT EDIT (PUT)
+      document
+        .getElementById("editTransactionForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const id = document.getElementById("edit-id").value;
+          const dVal = document.getElementById("edit-date").value;
+
+          const payload = {
+            nominal: parseFloat(document.getElementById("edit-nominal").value),
+            transactionsDate: dVal
+              ? new Date(dVal).toISOString()
+              : new Date().toISOString(), // SAFE FORMAT
+            status: document.getElementById("edit-status").value,
+            description: document.getElementById("edit-description").value,
+          };
+
+          try {
+            const res = await fetch(`/api/transactions/${id}`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+            if ((await res.json()).success) {
+              closeEditModal();
+              loadData();
+            }
+          } catch (e) {
+            alert("Gagal memperbarui");
+          }
         });
 
-        // Bootstrap
-        (async () => {
-            if (await checkAuth()) loadData();
-        })();
+      // DELETE
+      async function deleteTransaction(id) {
+        if (!confirm("Yakin ingin menghapus?")) return;
+        const res = await fetch(`/api/transactions/${id}`, {
+          method: "DELETE",
+        });
+        if ((await res.json()).success) loadData();
+      }
+
+      // ADD (POST)
+      document
+        .getElementById("addTransactionForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const dVal = document.getElementById("date").value;
+          const payload = {
+            nominal: parseFloat(document.getElementById("nominal").value),
+            transactionsDate: dVal
+              ? new Date(dVal).toISOString()
+              : new Date().toISOString(), // SAFE FORMAT
+            status: document.getElementById("status").value,
+            description: document.getElementById("description").value,
+          };
+          const res = await fetch("/api/transactions", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+          if ((await res.json()).success) {
+            document.getElementById("addTransactionForm").reset();
+            setType("income");
+            loadData();
+          }
+        });
+
+      async function checkAuth() {
+        try {
+          const res = await fetch("/api/me");
+          const json = await res.json();
+          if (json.success) {
+            document.getElementById("username").textContent =
+              json.data.username;
+            return true;
+          }
+          window.location.href = "/login/";
+        } catch (e) {
+          window.location.href = "/login/";
+        }
+        return false;
+      }
+
+      (async () => {
+        if (await checkAuth()) loadData();
+      })();
     </script>
-</body>
+  </body>
 </html>

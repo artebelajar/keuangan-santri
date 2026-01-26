@@ -13,9 +13,12 @@ import { loginRouter } from "./API/login.js";
 import { logoutRouter } from "./API/logout.js";
 import { checkAuth } from "./API/index.js";
 import { authMiddleware } from "./API/auth.js";
-import  addTransaction  from "./API/addTransaction.js";
-import  getTransaction  from "./API/getTransaction.js";
-import  getAllTransaction  from "./API/getAllTransaction.js";
+import addTransaction from "./API/addTransaction.js";
+import getTransaction from "./API/getTransaction.js";
+import getAllTransaction from "./API/getAllTransaction.js";
+import deleteTransaction from "./API/deleteTransaction.js";
+import updateTransactionRouter from "./API/updateTrasaction.js";
+import getOneTransactionRouter from "./API/getOneTransaction.js";
 
 const app = new Hono();
 const SECRET = process.env.JWT_SECRET;
@@ -25,10 +28,12 @@ loginRouter(app);
 logoutRouter(app);
 checkAuth(app);
 // app.use("/api/transactions/*", authMiddleware);
-app.post("/api/transactions", authMiddleware, addTransaction)
-app.get("/api/transactions", authMiddleware, getTransaction)
-app.get("/api/trasactions/all", authMiddleware, getAllTransaction)
-
+app.post("/api/transactions", authMiddleware, addTransaction);
+app.get("/api/transactions", authMiddleware, getTransaction);
+app.get("/api/trasactions/all", authMiddleware, getAllTransaction);
+app.delete("/api/transactions/:id", authMiddleware, deleteTransaction);
+app.get("/api/transactions/:id", authMiddleware, getOneTransactionRouter);
+app.put("/api/transactions/:id", authMiddleware, updateTransactionRouter);
 
 app.use("/*", serveStatic({ root: "./public" }));
 
@@ -41,7 +46,6 @@ app.use("/*", serveStatic({ root: "./public" }));
 // app.get('/', (c) => c.text('Hello World'));
 // app.get('/api/*', (c) => c.json({ status: 'ok' }));
 
-
 // if (process.env.VERCEL) {
 //   globalThis.app = app;
 // } else {
@@ -53,4 +57,4 @@ const port = 8000;
 console.log(`server is running on http://localhost:${port}`);
 serve({ fetch: app.fetch, port });
 
-export default {app, authMiddleware};
+export default { app, authMiddleware };
